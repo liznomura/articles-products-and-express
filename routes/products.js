@@ -3,30 +3,50 @@ const express = require('express');
 const router = express.Router();
 const Products = require('../db/products.js');
 
+let id = 0;
 let productObj = {
   products: Products.getAll()
 };
 
 function handleProdPost( req, res ) {
   let obj;
-  let id = 0;
 
-  if(!req.body.name || !req.body.price || !req.body.inventory) {
-    res.send('Please enter name, price, and inventory values');
-  } else {
+  req.body.price = parseInt(req.body.price);
+  req.body.inventory = parseInt(req.body.inventory);
+
+  if(req.body.name && typeof req.body.price === 'number' && typeof req.body.inventory === 'number') {
     id++;
     req.body.id = id;
-    req.body.price = parseInt(req.body.price);
-    req.body.inventory = parseInt(req.body.inventory);
     obj = req.body;
-
     Products.postProduct(obj);
     res.end();
+  } else {
+    res.send('Please enter valid values');
   }
 }
 
 function handleProdPut( req, res ) {
+  const idArr = Products.getIds();
+  const index = idArr.indexOf(parseInt(req.body.id));
+  const obj = req.body;
+  if(index >= 0) {
+    Products.putProduct(index, obj);
+    res.end();
+  } else {
+    res.send('Please enter valid id, name, price, and inventory');
+  }
+}
 
+function handleProdDelete( req, res ) {
+  const idArr = Products.getIds();
+  const index = idArr.indexOf(parseInt(req.body.id));
+  const obj = req.body;
+  if(index >= 0) {
+    Products.deleteProduct(index);
+    res.end();
+  } else {
+    res.send('Please enter a valid id to delete');
+  }
 }
 
 router.get('/', ( req, res ) => {
@@ -47,8 +67,8 @@ router.get('/', ( req, res ) => {
 
 router.post('/', handleProdPost);
 
-// router.put('/:id', handleProdPut);
+router.put('/:id', handleProdPut);
 
-// router.delete('/:id', handleProdDelete);
+router.delete('/:id', handleProdDelete);
 
 module.exports = router;

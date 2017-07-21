@@ -9,17 +9,25 @@ function getAll() {
   return productArr;
 }
 
-// function putProd( req, res ) {
-//   const mapProdArr = prodArr.map( product => { return product.id; });
+function getIds() {
+  return productArr.map( product => {
+    return product.id;
+  });
+}
 
-//   const indexProd = mapProdArr.indexOf(req.id);
+function putProduct(index, obj) {
+  productArr[index] = obj;
+}
 
-//   if(indexProd >= 0) {
-//     prodArr
-//   }
-// }
+function deleteProduct(index) {
+  productArr.splice(index, 1);
+  console.log(productArr);
+}
 
 module.exports = {
   postProduct: postProduct,
-  getAll: getAll
+  getAll: getAll,
+  getIds: getIds,
+  putProduct: putProduct,
+  deleteProduct: deleteProduct
 };
