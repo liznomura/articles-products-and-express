@@ -4,7 +4,7 @@ const router = express.Router();
 const Products = require('../db/products.js');
 
 let id = 0;
-let productObj = {
+let productsObj = {
   products: Products.getAll()
 };
 
@@ -50,12 +50,17 @@ function handleProdDelete( req, res ) {
 }
 
 router.get('/', ( req, res ) => {
-  res.render('./products/index.hbs', productObj);
+  res.render('./products/index.hbs', productsObj);
 });
 
-// router.get('/:id', ( req, res ) => {
-//   res.render('./products/product.hbs', somedata);
-// });
+router.get('/:id', ( req, res ) => {
+  if(typeof id === 'number') {
+    let getProduct = Products.getAll().filter( product => { return product.id === id; } );
+    res.render('./products/product.hbs', getProduct.pop());
+  } else {
+    res.send('Please enter a valid id');
+  }
+});
 
 // router.get('/:id/edit', ( req, res ) => {
 //   res.render('./products/edit.hbs', somedata);
