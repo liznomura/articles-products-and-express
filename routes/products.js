@@ -4,15 +4,12 @@ const router = express.Router();
 const Products = require('../db/products.js');
 
 let id = 1;
-let getProduct;
 
-function getOne(id) {
+function findProduct(id) {
   if(typeof id === 'number') {
-    getProduct = Products.getAll().filter( product => {
-      return product.id === id;
+    return Products.getAll().find( product => {
+      return product.id == id;
     });
-  } else {
-    res.send('Please enter a valid id');
   }
 }
 
@@ -34,14 +31,14 @@ function handleProdPost( req, res ) {
 }
 
 function handleProdPut( req, res ) {
-  const idArr = Products.getIds();
-  const index = idArr.indexOf(parseInt(req.body.id));
-  const obj = req.body;
-  if(index >= 0) {
+  const idArr = Products.getIds(); // 1
+  const index = idArr.indexOf(parseInt(req.body.id)); // 0
+  const obj = req.body; // object with id, name, price, inventory
+  if(index >= 0) { // this runs
     Products.putProduct(index, obj);
-    res.end();
+    res.redirect(`/products/${req.params.id}`);
   } else {
-    res.send('Please enter valid id, name, price, and inventory');
+    res.redirect(`/${req.params.id}/edit`);
   }
 }
 
@@ -70,13 +67,12 @@ router.get('/new', ( req, res ) => {
 });
 
 router.get('/:id', ( req, res ) => {
-  getOne(parseInt(req.params.id));
-  res.render('./products/product', getProduct.pop());
+  res.render('./products/product', findProduct(parseInt(req.params.id)));
 });
 
 router.get('/:id/edit', ( req, res ) => {
-  getOne(parseInt(req.params.id));
-  res.render('./products/edit', getProduct.pop());
+
+  res.render('./products/edit', findProduct(parseInt(req.params.id)));
 });
 
 router.post('/', handleProdPost);
