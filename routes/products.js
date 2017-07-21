@@ -8,7 +8,7 @@ let id = 1;
 function findProduct(id) {
   if(typeof id === 'number') {
     return Products.getAll().find( product => {
-      return product.id == id;
+      return parseInt(product.id) === id;
     });
   }
 }
@@ -71,7 +71,6 @@ router.get('/:id', ( req, res ) => {
 });
 
 router.get('/:id/edit', ( req, res ) => {
-
   res.render('./products/edit', findProduct(parseInt(req.params.id)));
 });
 
