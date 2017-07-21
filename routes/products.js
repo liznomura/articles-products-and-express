@@ -64,19 +64,20 @@ router.get('/', ( req, res ) => {
   res.render('./products/index', productsObj);
 });
 
+router.get('/new', ( req, res ) => {
+  res.render('./products/new');
+});
+
 router.get('/:id', ( req, res ) => {
   getOne(parseInt(req.params.id));
-  res.render('./products/product.hbs', getProduct.pop());
+  res.render('./products/product', getProduct.pop());
 });
 
 router.get('/:id/edit', ( req, res ) => {
   getOne(parseInt(req.params.id));
-  res.render('./products/edit.hbs', getProduct.pop());
+  res.render('./products/edit', getProduct.pop());
 });
 
-// router.get('/new', ( req, res ) => {
-//   res.render('./products/new.hbs', somedata);
-// });
 
 router.post('/', handleProdPost);
 
