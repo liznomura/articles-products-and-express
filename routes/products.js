@@ -1,7 +1,6 @@
 /* jshint esversion:6 */
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
 const Products = require('../db/products.js');
 
 let productObj = {
@@ -9,7 +8,25 @@ let productObj = {
 };
 
 function handleProdPost( req, res ) {
-  Products.postProd(req, res);
+  let obj;
+  let id = 0;
+
+  if(!req.body.name || !req.body.price || !req.body.inventory) {
+    res.send('Please enter name, price, and inventory values');
+  } else {
+    id++;
+    req.body.id = id;
+    req.body.price = parseInt(req.body.price);
+    req.body.inventory = parseInt(req.body.inventory);
+    obj = req.body;
+
+    Products.postProduct(obj);
+    res.end();
+  }
+}
+
+function handleProdPut( req, res ) {
+
 }
 
 router.get('/', ( req, res ) => {
