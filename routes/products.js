@@ -4,9 +4,15 @@ const router = express.Router();
 const Products = require('../db/products.js');
 
 let id = 0;
-let productsObj = {
-  products: Products.getAll()
-};
+let getProduct;
+
+function getOne(id) {
+  if(typeof id === 'number') {
+    getProduct = Products.getAll().filter( product => {
+      return product.id === id;
+    });
+  }
+}
 
 function handleProdPost( req, res ) {
   let obj;
@@ -26,6 +32,7 @@ function handleProdPost( req, res ) {
 }
 
 function handleProdPut( req, res ) {
+  console.log('reqbody', req.body);
   const idArr = Products.getIds();
   const index = idArr.indexOf(parseInt(req.body.id));
   const obj = req.body;
@@ -49,22 +56,23 @@ function handleProdDelete( req, res ) {
   }
 }
 
+let productsObj = {
+  products: Products.getAll()
+};
+
 router.get('/', ( req, res ) => {
-  res.render('./products/index.hbs', productsObj);
+  res.render('./products/index', productsObj);
 });
 
 router.get('/:id', ( req, res ) => {
-  if(typeof id === 'number') {
-    let getProduct = Products.getAll().filter( product => { return product.id === id; } );
-    res.render('./products/product.hbs', getProduct.pop());
-  } else {
-    res.send('Please enter a valid id');
-  }
+  getOne(parseInt(req.params.id));
+  res.render('./products/product.hbs', getProduct.pop());
 });
 
-// router.get('/:id/edit', ( req, res ) => {
-//   res.render('./products/edit.hbs', somedata);
-// });
+router.get('/:id/edit', ( req, res ) => {
+  getOne(parseInt(req.params.id));
+  res.render('./products/edit.hbs', getProduct.pop());
+});
 
 // router.get('/new', ( req, res ) => {
 //   res.render('./products/new.hbs', somedata);
