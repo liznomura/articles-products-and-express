@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Products = require('../db/products.js');
 
-let id = 0;
+let id = 1;
 let getProduct;
 
 function getOne(id) {
@@ -11,6 +11,8 @@ function getOne(id) {
     getProduct = Products.getAll().filter( product => {
       return product.id === id;
     });
+  } else {
+    res.send('Please enter a valid id');
   }
 }
 
@@ -21,18 +23,17 @@ function handleProdPost( req, res ) {
   req.body.inventory = parseInt(req.body.inventory);
 
   if(req.body.name && typeof req.body.price === 'number' && typeof req.body.inventory === 'number') {
-    id++;
     req.body.id = id;
+    id++;
     obj = req.body;
     Products.postProduct(obj);
-    res.end();
+    res.redirect('/products');
   } else {
-    res.send('Please enter valid values');
+    res.redirect('/products/new');
   }
 }
 
 function handleProdPut( req, res ) {
-  console.log('reqbody', req.body);
   const idArr = Products.getIds();
   const index = idArr.indexOf(parseInt(req.body.id));
   const obj = req.body;
@@ -77,7 +78,6 @@ router.get('/:id/edit', ( req, res ) => {
   getOne(parseInt(req.params.id));
   res.render('./products/edit', getProduct.pop());
 });
-
 
 router.post('/', handleProdPost);
 

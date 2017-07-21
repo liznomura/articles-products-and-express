@@ -1,9 +1,9 @@
 <div class="edit">
 <form action="/products/{{id}}?_method=PUT" method="POST">
-  <p><input type="text" name="id" value={{id}} label="ID"></p>
-  <p><input type="text" name="name" value={{name}} label="Name"></p>
-  <p><input type="text" name="price" value={{price}} label="Price"></p>
-  <p><input type="text" name="inventory" value={{inventory}} label="Inventory"></p>
+  <p><label>ID: <input type="text" name="id" value={{id}}></label></p>
+  <p><label>Name: <input type="text" name="name" value={{name}}></label></p>
+  <p><label>Price: <input type="text" name="price" value={{price}}></label></p>
+  <p><label>Inventory: <input type="text" name="inventory" value={{inventory}}></label></p>
   <button type="submit">Edit Product</button>
   </form>
 </div>
