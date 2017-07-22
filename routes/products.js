@@ -20,8 +20,10 @@ function handleProdPost( req, res ) {
   req.body.inventory = parseInt(req.body.inventory);
 
   if(req.body.name && typeof req.body.price === 'number' && typeof req.body.inventory === 'number') {
+    if(!req.body.id){
     req.body.id = id;
     id++;
+    }
     obj = req.body;
     Products.postProduct(obj);
     res.redirect('/products');
@@ -32,12 +34,11 @@ function handleProdPost( req, res ) {
 
 function handleProdPut( req, res ) {
   let index = Products.getAll().findIndex( product => {
-    console.log(product.id);
-    return parseInt(product.id) === req.params.id;
+    return parseInt(product.id) === parseInt(req.params.id);
   });
-  console.log(index);
+
   if(index >= 0) {
-    console.log('hi');
+    let obj = req.body;
     Products.putProduct(index, obj);
     res.redirect(`/products/${req.params.id}`);
   } else {

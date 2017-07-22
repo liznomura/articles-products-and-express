@@ -1,22 +1,30 @@
 <h1>Products</h1>
 
 <div class="products">
-{{#if products}}
-  {{#each products}}
-  <div class="product">
-    <p>ID#: {{id}}</p>
-    <p>Name: {{name}}</p>
-    <p>Price: {{price}}</p>
-    <p>Total inventory: {{inventory}}</p>
+  <div class="btn">
+    <button type="button" onclick="location.href='./products/new'">Add a Product</button>
+    {{#if products}}
+    {{#each products}}
+    <div class="product">
+      <p>ID#: {{id}}</p>
+      <p>Name: {{name}}</p>
+      <p>Price: {{price}}</p>
+      <p>Total Inventory: {{inventory}}</p>
+    </div>
+    <div class="deleteBtn">
+      <form action="/products/{{id}}?_method=DELETE" method="POST">
+        <input type="hidden" name="id" value={{id}}>
+        <button type="submit">Remove</button>
+      </form>
+    </div>
+    <div class="editBtn">
+      <form action="/products/{{id}}/edit" method="GET">
+        <input type="hidden" name="id" value={{id}}>
+        <button type="submit">Edit</button>
+      </form>
+    </div>
+    {{/each}}
+    {{else}}
+    <p>No products to display</p>
+    {{/if}}
   </div>
-  <div class="deleteBtn">
-    <form action="/products/{{id}}?_method=DELETE" method="POST">
-      <input type="hidden" name="id" value={{id}}>
-      <button type="submit">Remove</button>
-    </form>
-  </div>
-  {{/each}}
-  {{else}}
-  <p>No products to display</p>
-  {{/if}}
-</div>
