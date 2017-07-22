@@ -21,7 +21,6 @@ function putProduct(index, obj) {
 
 function deleteProduct(index) {
   productArr.splice(index, 1);
-  console.log(productArr);
 }
 
 module.exports = {

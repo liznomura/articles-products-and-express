@@ -31,26 +31,30 @@ function handleProdPost( req, res ) {
 }
 
 function handleProdPut( req, res ) {
-  const idArr = Products.getIds(); // 1
-  const index = idArr.indexOf(parseInt(req.body.id)); // 0
-  const obj = req.body; // object with id, name, price, inventory
-  if(index >= 0) { // this runs
+  let index = Products.getAll().findIndex( product => {
+    console.log(product.id);
+    return parseInt(product.id) === req.params.id;
+  });
+  console.log(index);
+  if(index >= 0) {
+    console.log('hi');
     Products.putProduct(index, obj);
     res.redirect(`/products/${req.params.id}`);
   } else {
-    res.redirect(`/${req.params.id}/edit`);
+    res.redirect(`/products/${req.params.id}/edit`);
   }
 }
 
 function handleProdDelete( req, res ) {
-  const idArr = Products.getIds();
-  const index = idArr.indexOf(parseInt(req.body.id));
-  const obj = req.body;
+  let index = Products.getAll().findIndex( product => {
+    return parseInt(product.id) === parseInt(req.params.id);
+  });
+
   if(index >= 0) {
     Products.deleteProduct(index);
-    res.end();
+    res.redirect('/products');
   } else {
-    res.send('Please enter a valid id to delete');
+    res.redirect(`/products/${req.params.id}`);
   }
 }
 

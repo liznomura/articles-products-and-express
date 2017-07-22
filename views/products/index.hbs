@@ -6,5 +6,11 @@
   <p>Price: {{price}}</p>
   <p>Total inventory: {{inventory}}</p>
   </div>
+    <div class="deleteBtn">
+  <form action="/products/{{id}}?_method=DELETE" method="POST">
+      <input type="hidden" name="id" value={{id}}>
+      <button type="submit">Remove</button>
+    </form>
+  </div>
   {{/each}}
 </div>
